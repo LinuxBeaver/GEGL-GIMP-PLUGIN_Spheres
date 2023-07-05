@@ -1,4 +1,4 @@
-# GEGL Spheres - render a sphere or egg shape using GEGL
+# GEGL Spheres - render a sphere or egg shape using this Gimp plugin.
 ![image](https://github.com/LinuxBeaver/GEGL-Spheres---Render-Spheres-in-Gimp/assets/78667207/c9440ebe-fb3c-48e0-b4ff-14b26e120434)
 
 ## WARNING ABOUT BREAKING GEGL EFFECTS WITH THE NEWER INNER GLOW BINARY
