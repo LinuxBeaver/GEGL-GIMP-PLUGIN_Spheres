@@ -14,7 +14,7 @@
  * License along with GEGL; if not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright 2006 Øyvind Kolås <pippin@gimp.org>
- * 2022 Beaver GEGL Sphere
+ * 2023 Beaver GEGL Sphere
  */ 
 
 /* Sphere's GEGL GRAPH (at least during development) You can test sphere
