@@ -47,6 +47,7 @@ median-blur radius=0
 hue-chroma hue=0
 dropshadow x=11 y=20 opacity=0.6 radius=16 grow-radius=1
 
+JULY 14 2023 SPHERE DOES NOT WORK IN GIMP 2.99.16. Crashes on start up
 */
 
 #include "config.h"
@@ -326,6 +327,7 @@ typedef struct
   GeglNode *burn; 
   GeglNode *nop3; 
   GeglNode *nop5; 
+  GeglNode *normalimage;
   GeglNode *levels; 
   GeglNode *normalblendig; 
   GeglNode *innerglow; 
@@ -357,7 +359,7 @@ static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
   GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *input, *output, *graph, *graph2, *replace, *hue2, *zoom, *emboss, *none, *desat, *blur, *denoise, *colorblend, *color, *nop6, *image, *nop5, *burn, *nop3, *levels, *normalblendig, *innerglow, *nop4, *eggmode, *nop2,  *shadow, *screen, *container, *vertical, *thresholdalpha, *nop, *repairgeglgraph, *crop,  *huelight, *shapesize;
+  GeglNode *input, *output, *graph, *graph2, *replace, *hue2, *zoom, *emboss, *none, *desat, *blur, *denoise, *colorblend, *color, *nop6, *image, *nop5, *burn, *nop3, *levels, *normalblendig, *innerglow, *nop4, *eggmode, *nop2,  *shadow, *screen, *container, *vertical, *thresholdalpha, *nop, *repairgeglgraph, *crop,  *huelight, *normalimage, *shapesize;
 
 
   input    = gegl_node_get_input_proxy (gegl, "input");
@@ -494,6 +496,10 @@ colorblend = gegl_node_new_child (gegl,
                                   NULL);
 
 
+ normalimage   = gegl_node_new_child (gegl,
+                                  "operation", "gegl:over",
+                                  NULL);
+
 
  image   = gegl_node_new_child (gegl,
                                   "operation", "gegl:layer",
@@ -559,6 +565,7 @@ colorblend = gegl_node_new_child (gegl,
   state->crop = crop;
   state->zoom = zoom;
   state->image = image;
+  state->normalimage = normalimage;
   state->nop3 = nop3;
   state->hue2 = hue2;
   state->burn = burn;
@@ -604,19 +611,19 @@ default: colorblend = state->none;
                           /*This is an example of a very complex GEGL Graph*/
   if (o->innerglow)
   {
-  gegl_node_link_many (state->input, state->nop5, state->replace, state->vertical, state->thresholdalpha, state->nop, state->container, state->crop, state->zoom, state->huelight, state->desat, state->nop3, state->burn, state->levels, state->denoise, state->nop4, state->normalblendig,  state->shadow,  state->output, NULL);
+  gegl_node_link_many (state->input, state->replace, state->vertical, state->thresholdalpha, state->nop, state->container, state->crop, state->zoom, state->huelight, state->desat, state->nop3, state->burn, state->levels, state->denoise, state->nop4, state->normalblendig,  state->shadow,  state->output, NULL);
  /*container is the replace blend mode and it is containing most of sphere's graph, the exception being image overlay, resizing, levels adjustments, inner glow and shadow*/
   gegl_node_connect_from (state->container, "aux", colorblend, "output");
-  gegl_node_link_many (state->nop, state->graph, state->eggmode, state->nop2,  state->screen, state->graph2, state->repairgeglgraph,  state->nop6, colorblend,  NULL);
+  gegl_node_link_many (state->nop, state->graph, state->eggmode, state->nop2,  state->screen, state->graph2, state->repairgeglgraph, colorblend,  NULL);
  /*colorblend is HSL Color and it is connecting to color overlay.*/
   gegl_node_connect_from (colorblend, "aux", state->color, "output");
-  gegl_node_link_many (state->nop6, state->color,  NULL);
  /*Image file upload is being blended with burn blend mode. There is also a blur that by default applies to image file overlay*/
   gegl_node_connect_from (state->burn, "aux", state->blur, "output");
-  gegl_node_link_many (state->nop3, state->image, state->hue2, state->blur,  NULL);
+  gegl_node_link_many (state->nop3, state->normalimage, state->blur,  NULL);
+  gegl_node_connect_from (state->normalimage, "aux", state->hue2, "output");
+  gegl_node_link_many (state->image, state->hue2, NULL);
  /*GEGL Rectangle in a container all by itself due to a bug graphs have. Rectangle is needed for this plugin to work.*/
   gegl_node_connect_from (state->replace, "aux", state->shapesize, "output");
-  gegl_node_link_many (state->nop5, state->shapesize,  NULL);
  /*Emboss being fused with the screen blend mode*/
   gegl_node_connect_from (state->screen, "aux", state->emboss, "output");
   gegl_node_link_many (state->nop2, state->emboss,  NULL);
@@ -627,19 +634,19 @@ default: colorblend = state->none;
   }
 else
   {
-  gegl_node_link_many (state->input, state->nop5, state->replace, state->vertical, state->thresholdalpha, state->nop, state->container, state->crop, state->zoom,  state->huelight, state->desat, state->nop3, state->burn, state->levels, state->nop4, state->denoise, state->shadow,  state->output, NULL);
+  gegl_node_link_many (state->input, state->replace, state->vertical, state->thresholdalpha, state->nop, state->container, state->crop, state->zoom,  state->huelight, state->desat, state->nop3, state->burn, state->levels, state->nop4, state->denoise, state->shadow,  state->output, NULL);
  /*container is the replace blend mode and it is containing most of sphere's graph, the exception being image overlay, resizing, levels adjustments, and shadow*/
   gegl_node_connect_from (state->container, "aux", colorblend, "output");
-  gegl_node_link_many (state->nop, state->graph, state->eggmode, state->nop2,  state->screen, state->graph2, state->repairgeglgraph,   state->nop6, colorblend,  NULL);
+  gegl_node_link_many (state->nop, state->graph, state->eggmode, state->nop2,  state->screen, state->graph2, state->repairgeglgraph, colorblend,  NULL);
  /*colorblend is HSL Color and it is connecting to color overlay.*/
   gegl_node_connect_from (colorblend, "aux", state->color, "output");
-  gegl_node_link_many (state->nop6, state->color,  NULL);
  /*Image file upload is being blended with burn blend mode. There is also a blur that by default applies to image file overlay*/
   gegl_node_connect_from (state->burn, "aux", state->blur, "output");
-  gegl_node_link_many (state->nop3, state->image, state->hue2, state->blur,  NULL);
+  gegl_node_link_many (state->nop3, state->normalimage, state->blur,  NULL);
+  gegl_node_connect_from (state->normalimage, "aux", state->hue2, "output");
+  gegl_node_link_many (state->image, state->hue2, NULL);
  /*GEGL Rectangle in a container all by itself due to a bug graphs have. Rectangle is needed for this plugin to work.*/
   gegl_node_connect_from (state->replace, "aux", state->shapesize, "output");
-  gegl_node_link_many (state->nop5, state->shapesize,  NULL);
  /*Emboss being fused with the screen blend mode*/
   gegl_node_connect_from (state->screen, "aux", state->emboss, "output");
   gegl_node_link_many (state->nop2, state->emboss,  NULL);
