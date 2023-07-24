@@ -670,6 +670,8 @@ gegl_op_class_init (GeglOpClass *klass)
     "reference-hash", "5g0sph416a50a51170f0f25sb2ac",
     "description", _("GEGL renders a shiny glossed sphere or egg. Hue must be at 0 if HSL Color is used and HSL Color must be disabled to use hue rotate."
                      ""),
+    "gimp:menu-path", "<Image>/Filters/Render/Fun",
+    "gimp:menu-label", _("Sphere..."),
     NULL);
 }
 
