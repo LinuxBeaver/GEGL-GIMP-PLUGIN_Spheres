@@ -17,7 +17,7 @@
  * 2022 Beaver (GEGL inner glow)
  */
 
-/*GEGL Inner Glow is a stand alone plugin but it is also part of GEGL Effects. The stand alone version does more then the GEGL Effects implementation of it. */
+/*GEGL Inner Glow is a stand alone plugin but it is also part of Graphical Effects. The stand alone version does more then the Graphical Effects implementation of it. */
 
 /*
 Recreation of Inner Glow's GEGL Graph. May not be 100% accurate but you can test it without installing this way.
@@ -246,23 +246,23 @@ switch (o->mode) {
         break;
     case DEFAULT_IG:
  gegl_node_link_many (state->input, state->it,  state->shadow, state->color, state->in, state->median2, state->color2, state->crop, state->output, NULL);
- gegl_node_connect_from (state->in, "aux", state->input, "output");
+ gegl_node_connect (state->in, "aux", state->input, "output");
         break;
     case INVERT_TRANSPARENCY_IG:
   gegl_node_link_many (state->input, state->it,  state->shadow,  state->it2,  state->color, state->in, state->median2, state->color2, state->crop, state->output, NULL);
- gegl_node_connect_from (state->in, "aux", state->input, "output");
+ gegl_node_connect (state->in, "aux", state->input, "output");
         break;
     case DEFAULT_IG_IMAGE_UPLOAD:
  gegl_node_link_many (state->input, state->it,  state->shadow, state->color, state->in, state->median2, state->color2, state->idref, state->atop, state->crop, state->output, NULL);
  gegl_node_link_many (state->idref, state->image, state->blurimage,  NULL);
- gegl_node_connect_from (state->in, "aux", state->input, "output");
- gegl_node_connect_from (state->atop, "aux", state->blurimage, "output");
+ gegl_node_connect (state->in, "aux", state->input, "output");
+ gegl_node_connect (state->atop, "aux", state->blurimage, "output");
         break;
     case INVERT_TRANSPARENCY_IG_IMAGE_UPLOAD:
  gegl_node_link_many (state->input, state->it,  state->shadow, state->it2,  state->color, state->in, state->median2, state->color2,  state->idref, state->atop, state->crop, state->output, NULL);
  gegl_node_link_many (state->idref, state->image, state->blurimage,  NULL);
- gegl_node_connect_from (state->in, "aux", state->input, "output");
- gegl_node_connect_from (state->atop, "aux", state->blurimage, "output");
+ gegl_node_connect (state->in, "aux", state->input, "output");
+ gegl_node_connect (state->atop, "aux", state->blurimage, "output");
     }
   }
 
@@ -280,7 +280,7 @@ GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass)
     "name",        "lb:innerglow",
     "title",       _("Inner Glow (to blend)"),
     "reference-hash", "g3do6aaoo1100g0fjf25sb2ac",
-    "description", _("GEGL does an inner glow effect. For this filter to work you need to use the 'Normal' or other blending options. Or a duplicate layer on top.  "
+    "description", _("Do an inner glow effect. For this filter to work you need to use the 'Normal' or other blending options. Or a duplicate layer on top.  "
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("Inner Glow (to blend)..."),

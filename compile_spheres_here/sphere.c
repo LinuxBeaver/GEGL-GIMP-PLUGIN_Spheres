@@ -613,22 +613,22 @@ default: colorblend = state->none;
   {
   gegl_node_link_many (state->input, state->replace, state->vertical, state->thresholdalpha, state->nop, state->container, state->crop, state->zoom, state->huelight, state->desat, state->nop3, state->burn, state->levels, state->denoise, state->nop4, state->normalblendig,  state->shadow,  state->output, NULL);
  /*container is the replace blend mode and it is containing most of sphere's graph, the exception being image overlay, resizing, levels adjustments, inner glow and shadow*/
-  gegl_node_connect_from (state->container, "aux", colorblend, "output");
+  gegl_node_connect (state->container, "aux", colorblend, "output");
   gegl_node_link_many (state->nop, state->graph, state->eggmode, state->nop2,  state->screen, state->graph2, state->repairgeglgraph, colorblend,  NULL);
  /*colorblend is HSL Color and it is connecting to color overlay.*/
-  gegl_node_connect_from (colorblend, "aux", state->color, "output");
+  gegl_node_connect (colorblend, "aux", state->color, "output");
  /*Image file upload is being blended with burn blend mode. There is also a blur that by default applies to image file overlay*/
-  gegl_node_connect_from (state->burn, "aux", state->blur, "output");
+  gegl_node_connect (state->burn, "aux", state->blur, "output");
   gegl_node_link_many (state->nop3, state->normalimage, state->blur,  NULL);
-  gegl_node_connect_from (state->normalimage, "aux", state->hue2, "output");
+  gegl_node_connect (state->normalimage, "aux", state->hue2, "output");
   gegl_node_link_many (state->image, state->hue2, NULL);
  /*GEGL Rectangle in a container all by itself due to a bug graphs have. Rectangle is needed for this plugin to work.*/
-  gegl_node_connect_from (state->replace, "aux", state->shapesize, "output");
+  gegl_node_connect (state->replace, "aux", state->shapesize, "output");
  /*Emboss being fused with the screen blend mode*/
-  gegl_node_connect_from (state->screen, "aux", state->emboss, "output");
+  gegl_node_connect (state->screen, "aux", state->emboss, "output");
   gegl_node_link_many (state->nop2, state->emboss,  NULL);
  /*Inner Glow inside the normal blend mode. Exclusive to this top graph. Will not be found in its alternative.*/
-  gegl_node_connect_from (state->normalblendig, "aux", state->innerglow, "output");
+  gegl_node_connect (state->normalblendig, "aux", state->innerglow, "output");
   gegl_node_link_many (state->nop4, state->innerglow,  NULL);
 
   }
@@ -636,19 +636,19 @@ else
   {
   gegl_node_link_many (state->input, state->replace, state->vertical, state->thresholdalpha, state->nop, state->container, state->crop, state->zoom,  state->huelight, state->desat, state->nop3, state->burn, state->levels, state->nop4, state->denoise, state->shadow,  state->output, NULL);
  /*container is the replace blend mode and it is containing most of sphere's graph, the exception being image overlay, resizing, levels adjustments, and shadow*/
-  gegl_node_connect_from (state->container, "aux", colorblend, "output");
+  gegl_node_connect (state->container, "aux", colorblend, "output");
   gegl_node_link_many (state->nop, state->graph, state->eggmode, state->nop2,  state->screen, state->graph2, state->repairgeglgraph, colorblend,  NULL);
  /*colorblend is HSL Color and it is connecting to color overlay.*/
-  gegl_node_connect_from (colorblend, "aux", state->color, "output");
+  gegl_node_connect (colorblend, "aux", state->color, "output");
  /*Image file upload is being blended with burn blend mode. There is also a blur that by default applies to image file overlay*/
-  gegl_node_connect_from (state->burn, "aux", state->blur, "output");
+  gegl_node_connect (state->burn, "aux", state->blur, "output");
   gegl_node_link_many (state->nop3, state->normalimage, state->blur,  NULL);
-  gegl_node_connect_from (state->normalimage, "aux", state->hue2, "output");
+  gegl_node_connect (state->normalimage, "aux", state->hue2, "output");
   gegl_node_link_many (state->image, state->hue2, NULL);
  /*GEGL Rectangle in a container all by itself due to a bug graphs have. Rectangle is needed for this plugin to work.*/
-  gegl_node_connect_from (state->replace, "aux", state->shapesize, "output");
+  gegl_node_connect (state->replace, "aux", state->shapesize, "output");
  /*Emboss being fused with the screen blend mode*/
-  gegl_node_connect_from (state->screen, "aux", state->emboss, "output");
+  gegl_node_connect (state->screen, "aux", state->emboss, "output");
   gegl_node_link_many (state->nop2, state->emboss,  NULL);
 }
 }
@@ -668,7 +668,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "title",       _("Sphere Generator"),
     "categories",  "Artistic",
     "reference-hash", "5g0sph416a50a51170f0f25sb2ac",
-    "description", _("GEGL renders a shiny glossed sphere or egg. Hue must be at 0 if HSL Color is used and HSL Color must be disabled to use hue rotate."
+    "description", _("Renders a shiny glossed sphere or egg. Hue must be at 0 if HSL Color is used and HSL Color must be disabled to use hue rotate."
                      ""),
     "gimp:menu-path", "<Image>/Filters/Render/Fun",
     "gimp:menu-label", _("Sphere..."),
