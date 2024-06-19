@@ -211,8 +211,7 @@ ui_meta ("visible", "guichange {default}")
 
 property_double (in_low, _("Levels - Low input"), 0.0)
     description ( _("Levels setting - Input luminance level to become lowest output"))
-    ui_range    (0.0, 0.6)
-   value_range  (0.0, 0.6)
+   ui_range    (0.0, 0.6)
 ui_meta ("visible", "guichange {default}")
 
 
