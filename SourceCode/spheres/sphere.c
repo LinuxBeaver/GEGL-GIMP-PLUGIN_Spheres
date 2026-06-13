@@ -17,8 +17,8 @@
  * 2023 Beaver GEGL Sphere
  */ 
 
-/* Sphere's GEGL GRAPH (at least during development) You can test sphere
-without installing it by pasting this data inside Gimp's GEGL Graph.
+/* Sphereꞌs GEGL GRAPH (at least during development) You can test sphere
+without installing it by pasting this data inside Gimpꞌs GEGL Graph.
 
  
 id=2 over aux=[ ref=2 
@@ -62,8 +62,8 @@ JULY 14 2023 SPHERE DOES NOT WORK IN GIMP 2.99.16. Crashes on start up
 #define LONG2 \
  " opacity value=10 id=1 src-in aux=[ ref=1] id=1 src-in aux=[ ref=1] id=1 src-in aux=[ ref=1] id=1 src-in aux=[ ref=1] id=1 src-in aux=[ ref=1] median-blur radius=0 levels in-low=0.3 median-blur radius=0 "\
 
-/*  Not needed anymore. Earlier in the day of development, this filter called gaussian blur's base filter and gegl rectangle together.
- Now I found a better alternative. I'm just keeping this in case one day it becomes useful again.
+/*  Not needed anymore. Earlier in the day of development, this filter called gaussian blurꞌs base filter and gegl rectangle together.
+ Now I found a better alternative. Iꞌm just keeping this in case one day it becomes useful again.
 
 property_double (shapesize, _("Size of the Sphere"), 130)
     description (_("Size of the sphere. Larger makes things slower"))
@@ -97,7 +97,7 @@ ui_meta ("visible", "guichange {default}")
 
 
 property_color (coloroverlay, _("HSL Color change mode (conflicts with hue)"), "#fb0000")
-    description (_("The color to paint over the sphere that uses the HSL Color blend mode. Please set hue to 0 (its middle) when using this. If the color isn't changing proper it is because hue is on a value other then 0."))
+    description (_("The color to paint over the sphere that uses the HSL Color blend mode. Please set hue to 0 (its middle) when using this. If the color isnꞌt changing proper it is because hue is on a value other then 0."))
 ui_meta ("visible", "guichange {default}")
 
 enum_start (gegl_blend_mode_typecolorsphere)
@@ -183,7 +183,7 @@ property_double (shadowgrowradius, _("Shadow Grow radius"), 0.0)
 ui_meta ("visible", "guichange {shadow}")
 
 property_color  (shadowcolor, _("Shadow Color"), "black")
-  description   (_("The shadow's color (defaults to 'black')"))
+  description   (_("The shadowꞌs color (defaults to ꞌblackꞌ)"))
 ui_meta ("visible", "guichange {shadow}")
 
 
@@ -295,7 +295,7 @@ ui_meta ("visible", "guichange {innerglow}")
 
 property_double  (innerglowfix, _("Median to fix non-effected pixels on edges"), 65)
   value_range (50, 80)
-  description (_("Due to a bug I can't solve, not all pixels will be effected by inner glow. Median blur solves that problem.'"))
+  description (_("Due to a bug I canꞌt solve, not all pixels will be effected by inner glow. Median blur solves that problem.ꞌ"))
 ui_meta ("visible", "guichange {innerglow}")
 
 
@@ -381,7 +381,7 @@ static void attach (GeglOperation *operation)
                                   "operation", "gimp:threshold-alpha", "value", 0.1,
                                   NULL);
 
- /*These are Gaussian Blur's base operations. It makes sense to use them in this workflow. */
+ /*These are Gaussian Blurꞌs base operations. It makes sense to use them in this workflow. */
  vertical   = gegl_node_new_child (gegl,
                                   "operation", "gegl:gblur-1d", "orientation", 1, "std-dev", 130.0,
                                   NULL);
@@ -469,11 +469,11 @@ static void attach (GeglOperation *operation)
  zoom   = gegl_node_new_child (gegl,
                                   "operation", "gegl:lens-distortion",
                                   NULL);
- /*This is Gimp's burn blend mode labelled 33, One day in the future it might be 32 or 34 or something else */
+ /*This is Gimpꞌs burn blend mode labelled 33, One day in the future it might be 32 or 34 or something else */
 burn = gegl_node_new_child (gegl,
                                   "operation", "gimp:layer-mode", "layer-mode", 33, "opacity", 0.65, "composite-mode", 0, NULL); 
 
- /*This is Gimp's HSL COLOR blend mode labelled 39, One day in the future it might be 38 or 40 or something else */
+ /*This is Gimpꞌs HSL COLOR blend mode labelled 39, One day in the future it might be 38 or 40 or something else */
 colorblend = gegl_node_new_child (gegl,
                                   "operation", "gimp:layer-mode", "layer-mode", 39,  "composite-mode", 2, "blend-space", 2, NULL); 
 
@@ -611,7 +611,7 @@ default: colorblend = state->none;
   if (o->innerglow)
   {
   gegl_node_link_many (state->input, state->replace, state->vertical, state->thresholdalpha, state->nop, state->container, state->crop, state->zoom, state->huelight, state->desat, state->nop3, state->burn, state->levels, state->denoise, state->nop4, state->normalblendig,  state->shadow,  state->output, NULL);
- /*container is the replace blend mode and it is containing most of sphere's graph, the exception being image overlay, resizing, levels adjustments, inner glow and shadow*/
+ /*container is the replace blend mode and it is containing most of sphereꞌs graph, the exception being image overlay, resizing, levels adjustments, inner glow and shadow*/
   gegl_node_connect (state->container, "aux", colorblend, "output");
   gegl_node_link_many (state->nop, state->graph, state->eggmode, state->nop2,  state->screen, state->graph2, state->repairgeglgraph, colorblend,  NULL);
  /*colorblend is HSL Color and it is connecting to color overlay.*/
@@ -634,7 +634,7 @@ default: colorblend = state->none;
 else
   {
   gegl_node_link_many (state->input, state->replace, state->vertical, state->thresholdalpha, state->nop, state->container, state->crop, state->zoom,  state->huelight, state->desat, state->nop3, state->burn, state->levels, state->nop4, state->denoise, state->shadow,  state->output, NULL);
- /*container is the replace blend mode and it is containing most of sphere's graph, the exception being image overlay, resizing, levels adjustments, and shadow*/
+ /*container is the replace blend mode and it is containing most of sphereꞌs graph, the exception being image overlay, resizing, levels adjustments, and shadow*/
   gegl_node_connect (state->container, "aux", colorblend, "output");
   gegl_node_link_many (state->nop, state->graph, state->eggmode, state->nop2,  state->screen, state->graph2, state->repairgeglgraph, colorblend,  NULL);
  /*colorblend is HSL Color and it is connecting to color overlay.*/
